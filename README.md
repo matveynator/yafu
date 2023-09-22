@@ -1,4 +1,4 @@
-# yafu - и вправду, ещё одна факториальная утилита в Go
+# yafu - и вправду, ещё одна утилита факторизации чисел в Go
 
 <p align="left">
 <img property="og:image" src="https://repository-images.githubusercontent.com/695237618/69143ff9-10a1-4922-8c4e-c4c1d24595e5" width="25%">
