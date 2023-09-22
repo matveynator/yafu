@@ -1,20 +1,21 @@
-# yafu - yet another factorial utility in Go
+# yafu - и вправду, ещё одна факториальная утилита в Go
 
 - Скачайте последнюю версию [↓ YAFU.](http://files.matveynator.ru/yafu/latest/)
-
-> Поддерживаемые операционные системы: [Linix](http://files.matveynator.ru/yafu/latest/linux), [Windows](http://files.matveynator.ru/yafu/latest/windows), [Android](http://files.matveynator.ru/yafu/latest/android), [Mac](http://files.matveynator.ru/yafu/latest/mac), [IOS](http://files.matveynator.ru/yafu/latest/ios), [FreeBSD](http://files.matveynator.ru/yafu/latest/freebsd), [DragonflyBSD](http://files.matveynator.ru/yafu/latest/dragonfly), [OpenBSD](http://files.matveynator.ru/yafu/latest/openbsd), [NetBSD](http://files.matveynator.ru/yafu/latest/netbsd), [Plan9](http://files.matveynator.ru/yafu/latest/plan9), [AIX](http://files.matveynator.ru/yafu/latest/aix), [Solaris](http://files.matveynator.ru/yafu/latest/solaris), [Illumos](http://files.matveynator.ru/yafu/latest/illumos)
-
 - Download latest version of [↓ YAFU.](http://files.matveynator.ru/yafu/latest/)
 
 
-### Вспомогательные конфигурационные опции:
+> Поддерживаемые операционные системы: [Linix](http://files.matveynator.ru/yafu/latest/linux), [Windows](http://files.matveynator.ru/yafu/latest/windows), [Android](http://files.matveynator.ru/yafu/latest/android), [Mac](http://files.matveynator.ru/yafu/latest/mac), [IOS](http://files.matveynator.ru/yafu/latest/ios), [FreeBSD](http://files.matveynator.ru/yafu/latest/freebsd), [DragonflyBSD](http://files.matveynator.ru/yafu/latest/dragonfly), [OpenBSD](http://files.matveynator.ru/yafu/latest/openbsd), [NetBSD](http://files.matveynator.ru/yafu/latest/netbsd), [Plan9](http://files.matveynator.ru/yafu/latest/plan9), [AIX](http://files.matveynator.ru/yafu/latest/aix), [Solaris](http://files.matveynator.ru/yafu/latest/solaris), [Illumos](http://files.matveynator.ru/yafu/latest/illumos)
+
+
+### Секретные карманные опции для беседы с числами:
 
 ```
 yafu -h
 
 -file string
-    	путь к файлу с кандидатами
-``` 
+      за этим углом прячется путь к файлу с кандидатами
+```
+
 
 ### Пример содержимого файла candidates.txt:
 ```
