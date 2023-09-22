@@ -46,6 +46,7 @@ do
 		  rm -rf ../binaries/${version}/${target_os_name}/${arch}
 		else
 		  echo "GOOS=${os} GOARCH=${arch} go build -ldflags "-X yafu/pkg/config.CompileVersion=${version}" -o ../binaries/${version}/${target_os_name}/${arch}/${execution_file} ../yafu.go"
+      chmod +x ../binaries/${version}/${target_os_name}/${arch}/${execution_file}
 		fi
 	done
 done
