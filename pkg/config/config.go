@@ -32,6 +32,9 @@ func ParseFlags() (config Settings)  {
   //process all flags
   flag.Parse()
 
+  //set version from CompileVersion variable at build time
+  config.VERSION = CompileVersion
+
   if *flagVersion  {
     if config.VERSION != "" {
       fmt.Println("Version:", config.VERSION)
