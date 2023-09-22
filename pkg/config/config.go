@@ -45,9 +45,9 @@ func ParseFlags() (config Settings)  {
   }
 
   // Startup banner START:
-  fmt.Println("Starting %s ", config.APP_NAME)
+  fmt.Printf("Starting %s \n", config.APP_NAME)
   if config.VERSION != "" {
-    fmt.Println("Version %s ", config.VERSION)
+    fmt.Printf("Version %s \n", config.VERSION)
   }
 
   return
