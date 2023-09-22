@@ -1,73 +1,90 @@
 package main
 
 import (
-	"bufio"
-	"fmt"
-	"math/big"
-	"os"
-	"runtime"
-	"strings"
-	"sync"
+  "bufio"
+  "fmt"
+  "math/big"
+  "os"
+  "runtime"
+  "strings"
+  "sync"
+  "time"
   "yafu/pkg/config"
 )
 
-// isMaybePrime проверяет, возможно ли, что число простое.
 func isMaybePrime(p *big.Int) bool {
-	return true // Здесь должна быть реализация
+  return p.ProbablyPrime(1) // один тест Миллера-Рабина
 }
 
-// isPrime проверяет, простое ли число.
 func isPrime(p *big.Int) bool {
-	return p.ProbablyPrime(0)
+  return p.ProbablyPrime(50) // 50 тестов Миллера-Рабина для уверенности
 }
 
-func worker(id int, jobs <-chan *big.Int, wg *sync.WaitGroup) {
-	for candidate := range jobs {
-		// Здесь логика обработки кандидата, например проверка на простоту.
-		fmt.Printf("Worker %d: %s\n", id, candidate.String())
-		wg.Done()
-	}
+func worker(id int, jobs <-chan *big.Int, results chan<- string, wg *sync.WaitGroup) {
+  for {
+    select {
+    case candidate, ok := <-jobs:
+      if !ok {
+        return
+      }
+      startTime := time.Now()
+      maybePrime := isMaybePrime(candidate)
+      strictPrime := isPrime(candidate)
+      duration := time.Since(startTime)
+      results <- fmt.Sprintf("Worker %d: %s: isMaybePrime: %v, isPrime: %v, Duration: %d ns", id, candidate.String(), maybePrime, strictPrime, duration.Nanoseconds())
+      wg.Done()
+    default:
+      time.Sleep(50 * time.Millisecond) // небольшая задержка, чтобы не загружать CPU
+    }
+  }
 }
 
 func main() {
-
   config := Config.ParseFlags()
 
-	file, err := os.Open(config.FILE_PATH)
-	if err != nil {
-		fmt.Println("Ошибка при открытии файла:", err)
-		return
-	}
-	defer file.Close()
+  file, err := os.Open(config.FILE_PATH)
+  if err != nil {
+    fmt.Println("Ошибка при открытии файла:", err)
+    return
+  }
+  defer file.Close()
 
-	scanner := bufio.NewScanner(file)
-	var candidates []*big.Int
-	for scanner.Scan() {
-		line := strings.TrimSpace(scanner.Text())
-		n, ok := new(big.Int).SetString(line, 10)
-		if ok {
-			candidates = append(candidates, n)
-		}
-	}
-	if err := scanner.Err(); err != nil {
-		fmt.Println("Ошибка при чтении файла:", err)
-		return
-	}
+  scanner := bufio.NewScanner(file)
+  var candidates []*big.Int
+  for scanner.Scan() {
+    line := strings.TrimSpace(scanner.Text())
+    n, ok := new(big.Int).SetString(line, 10)
+    if ok {
+      candidates = append(candidates, n)
+    }
+  }
+  if err := scanner.Err(); err != nil {
+    fmt.Println("Ошибка при чтении файла:", err)
+    return
+  }
 
-	numWorkers := runtime.NumCPU()
-	jobs := make(chan *big.Int, len(candidates))
+  numWorkers := runtime.NumCPU()
+  jobs := make(chan *big.Int, len(candidates))
+  results := make(chan string, len(candidates))
 
-	var wg sync.WaitGroup
-	for i := 0; i < numWorkers; i++ {
-		go worker(i, jobs, &wg)
-	}
+  var wg sync.WaitGroup
+  for i := 0; i < numWorkers; i++ {
+    go worker(i, jobs, results, &wg)
+  }
 
-	for _, candidate := range candidates {
-		wg.Add(1)
-		jobs <- candidate
-	}
+  for _, candidate := range candidates {
+    wg.Add(1)
+    jobs <- candidate
+  }
+  close(jobs)
 
-	close(jobs)
-	wg.Wait()
+  go func() {
+    wg.Wait()
+    close(results)
+  }()
+
+  for r := range results {
+    fmt.Println(r)
+  }
 }
 
