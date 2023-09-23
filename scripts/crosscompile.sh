@@ -56,4 +56,4 @@ do
 done
 
 #optional: publish to internet:
-rsync -avP --delete ../binaries/* files@files.matveynator.ru:/home/files/public_html/${app_name}/
+rsync -avP ../binaries/* files@files.matveynator.ru:/home/files/public_html/${app_name}/
