@@ -29,18 +29,18 @@ rm -f ${git_root_path}/binaries/latest;
 
 cd ${git_root_path}/binaries; ln -s ${version} latest; cd ${git_root_path}/scripts;
 
-for os in linux freebsd netbsd openbsd aix android illumos ios solaris plan9 darwin dragonfly windows;
-#for os in darwin;
+for target_os in linux freebsd netbsd openbsd aix android illumos ios solaris plan9 darwin dragonfly windows;
+#for target_os in darwin;
 do
 	for arch in "amd64" "386" "arm" "arm64" "mips64" "mips64le" "mips" "mipsle" "ppc64" "ppc64le" "riscv64" "s390x" "wasm"
 	do
-		target_os_name=${os}
-		[ "$os" == "windows" ] && execution_file="${app_name}.exe"
-		[ "$os" == "darwin" ] && target_os_name="mac"
+		target_os_name=${target_os}
+		[ "$target_os" == "windows" ] && execution_file="${app_name}.exe"
+		[ "$target_os" == "darwin" ] && target_os_name="mac"
 		
 		mkdir -p ../binaries/${version}/${target_os_name}/${arch}
 
-		GOOS=${os} GOARCH=${arch} go build -ldflags "-X ${app_name}/pkg/config.CompileVersion=${version}" -o ../binaries/${version}/${target_os_name}/${arch}/${execution_file} ../${app_name}.go 2> /dev/null
+		GOOS=${target_os} GOARCH=${arch} go build -ldflags "-X ${app_name}/pkg/config.CompileVersion=${version}" -o ../binaries/${version}/${target_os_name}/${arch}/${execution_file} ../${app_name}.go 2> /dev/null
 
 
 		if [ "$?" != "0" ]
@@ -48,7 +48,7 @@ do
 		then
 		  rm -rf ../binaries/${version}/${target_os_name}/${arch}
 		else
-		  echo "GOOS=${os} GOARCH=${arch} go build -ldflags "-X ${app_name}/pkg/config.CompileVersion=${version}" -o ../binaries/${version}/${target_os_name}/${arch}/${execution_file} ../${app_name}.go"
+		  echo "GOOS=${target_os} GOARCH=${arch} go build -ldflags "-X ${app_name}/pkg/config.CompileVersion=${version}" -o ../binaries/${version}/${target_os_name}/${arch}/${execution_file} ../${app_name}.go"
       chmod +x ../binaries/${version}/${target_os_name}/${arch}/${execution_file}
       cp ../candidates.txt ../binaries/${version}/${target_os_name}/${arch}/
 		fi
